@@ -1,0 +1,374 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8070/music-survey",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/voting": {
+      "get": {
+        "tags": [
+          "genre-voting-controller"
+        ],
+        "summary": "Get all Votings",
+        "operationId": "getAllVotings",
+        "responses": {
+          "200": {
+            "description": "Found Votings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenreVotingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "genre-voting-controller"
+        ],
+        "summary": "Save a Voting",
+        "operationId": "saveGenre",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GenreVotingDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Voting saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenreVotingDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Voting object"
+          }
+        }
+      }
+    },
+    "/api/v1/instrument": {
+      "get": {
+        "tags": [
+          "instrument-controller"
+        ],
+        "summary": "Get all Instruments",
+        "operationId": "getAllInstruments",
+        "responses": {
+          "200": {
+            "description": "Found Instruments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InstrumentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "instrument-controller"
+        ],
+        "summary": "Save an Instrument",
+        "operationId": "saveInstrument",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstrumentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Genre saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstrumentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Instrument object"
+          }
+        }
+      }
+    },
+    "/api/v1/genre": {
+      "get": {
+        "tags": [
+          "genre-controller"
+        ],
+        "summary": "Get all Genres",
+        "operationId": "getAllGenres",
+        "responses": {
+          "200": {
+            "description": "Found Genres",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenreDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "genre-controller"
+        ],
+        "summary": "Save a Genre",
+        "operationId": "saveGenre_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Genre saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenreDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Genre object"
+          }
+        }
+      }
+    },
+    "/api/v1/instrument/{id}": {
+      "get": {
+        "tags": [
+          "instrument-controller"
+        ],
+        "summary": "Get an Instrument by its id",
+        "operationId": "getInstrumentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Instrument",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstrumentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied"
+          },
+          "404": {
+            "description": "Instrument not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "instrument-controller"
+        ],
+        "summary": "Delete an Instrument by its id",
+        "operationId": "deleteInstrumentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete the Instrument"
+          },
+          "400": {
+            "description": "Invalid id supplied"
+          },
+          "404": {
+            "description": "Instrument not found"
+          }
+        }
+      }
+    },
+    "/api/v1/genre/{id}": {
+      "get": {
+        "tags": [
+          "genre-controller"
+        ],
+        "summary": "Get a Genre by its id",
+        "operationId": "getGenreById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the Genre",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenreDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied"
+          },
+          "404": {
+            "description": "Genre not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "genre-controller"
+        ],
+        "summary": "Delete a Genre by its id",
+        "operationId": "deleteGenreById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete the Genre"
+          },
+          "400": {
+            "description": "Invalid id supplied"
+          },
+          "404": {
+            "description": "Genre not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GenreDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GenreVotingDto": {
+        "required": [
+          "genre",
+          "instrument",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "instrument": {
+            "$ref": "#/components/schemas/InstrumentDto"
+          },
+          "genre": {
+            "$ref": "#/components/schemas/GenreDto"
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "InstrumentDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

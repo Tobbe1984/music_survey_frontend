@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -67,6 +68,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "browserTarget": "music-survey-frontend:build:production"
@@ -96,12 +100,47 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": []
           }
         }
       }
+    },
+    "music-survey-swagger-client": {
+      "projectType": "library",
+      "root": "projects/music-survey-swagger-client",
+      "sourceRoot": "projects/music-survey-swagger-client/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/music-survey-swagger-client/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/music-survey-swagger-client/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/music-survey-swagger-client/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/music-survey-swagger-client/src/test.ts",
+            "tsConfig": "projects/music-survey-swagger-client/tsconfig.spec.json",
+            "karmaConfig": "projects/music-survey-swagger-client/karma.conf.js"
+          }
+        }
+      }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

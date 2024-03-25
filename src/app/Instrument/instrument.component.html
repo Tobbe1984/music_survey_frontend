@@ -1,0 +1,16 @@
+<h1>Select all instruments you can play</h1>
+<ng-container *ngIf="$instruments | async as instruments">
+  <form [formGroup]="form" (ngSubmit)="submit(instruments)">
+    <label formArrayName="instruments" *ngFor="let instrument of instrumentsFormArray.controls; let i = index">
+      <mat-checkbox [formControlName]="i">
+        {{instruments[i].name}}
+      </mat-checkbox>
+      <br/>
+    </label>
+
+    <br/>
+    <button class="btn btn-success">submit</button>
+  </form>
+</ng-container>
+
+
