@@ -73,10 +73,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "music-survey-frontend:build:production"
+              "buildTarget": "music-survey-frontend:build:production"
             },
             "development": {
-              "browserTarget": "music-survey-frontend:build:development"
+              "buildTarget": "music-survey-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "music-survey-frontend:build"
+            "buildTarget": "music-survey-frontend:build"
           }
         },
         "test": {
