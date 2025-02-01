@@ -21,11 +21,10 @@ interface GenreVoting extends GenreDto {
 }
 
 @Component({
-  selector: 'app-voting',
-  templateUrl: './voting.component.html',
-  styleUrls: ['./voting.component.scss'],
-  standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, JsonPipe, NgIf, AsyncPipe, MatSliderModule, MatCardModule, MatFormFieldModule, MatInputModule]
+    selector: 'app-voting',
+    templateUrl: './voting.component.html',
+    styleUrls: ['./voting.component.scss'],
+    imports: [FormsModule, CommonModule, ReactiveFormsModule, JsonPipe, NgIf, AsyncPipe, MatSliderModule, MatCardModule, MatFormFieldModule, MatInputModule]
 })
 export class VotingComponent implements OnInit {
   rockVote = 0;

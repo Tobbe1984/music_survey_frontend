@@ -9,15 +9,15 @@ import {Router} from "@angular/router";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatChipsModule} from "@angular/material/chips";
+import {MatChip, MatChipListbox, MatChipsModule} from "@angular/material/chips";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
+import {MatButton} from "@angular/material/button";
 
 @Component({
-  selector: 'app-instrument',
-  templateUrl: './instrument.component.html',
-  styleUrls: ['./instrument.component.scss'],
-  standalone: true,
+    selector: 'app-instrument',
+    templateUrl: './instrument.component.html',
+    styleUrls: ['./instrument.component.scss'],
   imports: [
     FormsModule,
     CommonModule,
@@ -27,9 +27,11 @@ import {MatInputModule} from "@angular/material/input";
     MatListModule,
     MatCardModule,
     MatFormFieldModule,
-    MatChipsModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatChip,
+    MatChipListbox,
+    MatButton
   ]
 })
 export class InstrumentComponent implements OnInit {
