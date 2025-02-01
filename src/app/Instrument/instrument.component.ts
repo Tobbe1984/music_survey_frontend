@@ -1,48 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {AsyncPipe, CommonModule, JsonPipe, NgIf} from "@angular/common";
-import {Observable, tap} from "rxjs";
+import {AsyncPipe, CommonModule} from "@angular/common";
+import {Observable} from "rxjs";
 import {InstrumentControllerService} from "../api/services/instrument-controller.service";
 import {InstrumentDto} from "../api/models/instrument-dto";
-import {InstrumentService} from "./instrument.service";
 import {Router} from "@angular/router";
+import {MatListModule} from "@angular/material/list";
+import {MatCardModule} from "@angular/material/card";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatIconModule} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
 
 @Component({
-  selector: 'app-genre',
+  selector: 'app-instrument',
   templateUrl: './instrument.component.html',
   styleUrls: ['./instrument.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, NgIf, AsyncPipe]
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    AsyncPipe,
+    MatListModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatIconModule,
+    MatInputModule
+  ]
 })
 export class InstrumentComponent implements OnInit {
-  form: FormGroup;
   $instruments: Observable<InstrumentDto[]> = new Observable<InstrumentDto[]>();
 
-  get instrumentsFormArray() {
-    return this.form.controls['instruments'] as FormArray;
-  }
+  selectedInstruments: InstrumentDto[] = [];
+  otherInstrument: string = '';
 
-  constructor(private formBuilder: FormBuilder,
-              private instrumentControllerService: InstrumentControllerService,
-              private instrumentService: InstrumentService,
+
+  constructor(private instrumentControllerService: InstrumentControllerService,
               private router: Router) {
-    this.form = this.formBuilder.group({
-      instruments: new FormArray([])
-    });
   }
 
   submit(instruments: InstrumentDto[]) {
-    this.instrumentService.instruments = this.form.value.instruments
-      .map((checked: boolean, i: number) => checked ? instruments[i].id : null)
-      .filter((v: null) => v !== null)
-      .map((id: number) => instruments.find(instrument => instrument.id === id));
     this.router.navigate(['/voting']);
   }
 
   ngOnInit(): void {
-    this.$instruments = this.instrumentControllerService.getAllInstruments().pipe(tap(instruments => {
-      instruments.forEach(() => this.instrumentsFormArray.push(new FormControl(false)));
-    }));
+    this.$instruments = this.instrumentControllerService.getAllInstruments();
+  }
+
+  toggleInstrument(instrument: InstrumentDto, event: any) {
+    if (event) {
+      this.selectedInstruments.push(instrument);
+    } else {
+      this.removeInstrument(instrument);
+    }
+  }
+
+  addOtherInstrument() {
+    if (this.otherInstrument.trim() && !this.selectedInstruments.
+    some(instr => instr.name.toLowerCase() === this.otherInstrument.trim().toLowerCase())) {
+      this.selectedInstruments.push({id: 0, name: this.otherInstrument.trim()});
+      this.otherInstrument = ''; // Eingabefeld leeren
+    }
+  }
+
+  removeInstrument(instrument: InstrumentDto) {
+    this.selectedInstruments = this.selectedInstruments.filter(item => item !== instrument);
+  }
+
+  instrumentSeleted(instrument: InstrumentDto) {
+    return this.selectedInstruments.some(instr => instr.name.toLowerCase() === instrument.name.trim().toLowerCase());
   }
 }

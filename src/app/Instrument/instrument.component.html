@@ -1,16 +1,25 @@
-<h1>Select all instruments you can play</h1>
-<ng-container *ngIf="$instruments | async as instruments">
-  <form [formGroup]="form" (ngSubmit)="submit(instruments)">
-    <label formArrayName="instruments" *ngFor="let instrument of instrumentsFormArray.controls; let i = index">
-      <mat-checkbox [formControlName]="i">
-        {{instruments[i].name}}
-      </mat-checkbox>
-      <br/>
-    </label>
+<mat-card class="container">
+  <h2>Wähle dein Instrument</h2>
 
-    <br/>
-    <button class="btn btn-success">submit</button>
-  </form>
-</ng-container>
+  <!-- Checkbox-Liste -->
+  <mat-selection-list>
+    <mat-list-option *ngFor="let instrument of $instruments | async" (selectedChange)="toggleInstrument(instrument, $event)" [selected]="instrumentSeleted(instrument)">
+      {{ instrument.name }}
+    </mat-list-option>
+  </mat-selection-list>
 
+  <!-- Eingabefeld für andere Instrumente -->
+  <mat-form-field appearance="outline">
+    <mat-label>Anderes Instrument</mat-label>
+    <input matInput [(ngModel)]="otherInstrument" (keyup.enter)="addOtherInstrument()">
+    <button mat-button matSuffix (click)="addOtherInstrument()">Hinzufügen</button>
+  </mat-form-field>
 
+  <!-- Anzeige der ausgewählten Instrumente mit Chips -->
+  <mat-chip-list>
+    <mat-chip *ngFor="let instrument of selectedInstruments" removable="true" (removed)="removeInstrument(instrument)">
+      {{ instrument.name }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</mat-card>
