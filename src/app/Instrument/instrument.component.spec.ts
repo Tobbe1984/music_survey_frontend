@@ -87,7 +87,7 @@ describe('InstrumentComponent', () => {
   });
 
   it('should navigate on submit', () => {
-    component.submit([]);
+    component.submit();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/voting']);
   });
 });

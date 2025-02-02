@@ -13,6 +13,11 @@ import {MatChip, MatChipListbox, MatChipsModule} from "@angular/material/chips";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
+import {Store} from "@ngrx/store";
+import {InstrumentState} from "../shared/store/instrument/instrument.reducer";
+import {selectAllInstruments, selectSelectedInstruments} from "../shared/store/instrument/instrument.selectors";
+import {addInstrument, loadInstruments, removeInstrument} from "../shared/store/instrument/instrument.actions";
+import {map} from "rxjs/operators";
 
 @Component({
     selector: 'app-instrument',
@@ -35,45 +40,50 @@ import {MatButton} from "@angular/material/button";
   ]
 })
 export class InstrumentComponent implements OnInit {
-  $instruments: Observable<InstrumentDto[]> = new Observable<InstrumentDto[]>();
-
-  selectedInstruments: InstrumentDto[] = [];
+  instruments$: Observable<InstrumentDto[]>;
+  selectedInstruments$: Observable<InstrumentDto[]>;
   otherInstrument: string = '';
 
 
-  constructor(private instrumentControllerService: InstrumentControllerService,
+  constructor(private store: Store<InstrumentState>,
               private router: Router) {
+    this.instruments$ = this.store.select(selectAllInstruments);
+    this.selectedInstruments$ = this.store.select(selectSelectedInstruments);
   }
 
-  submit(instruments: InstrumentDto[]) {
+  submit() {
     this.router.navigate(['/voting']);
   }
 
   ngOnInit(): void {
-    this.$instruments = this.instrumentControllerService.getAllInstruments();
+    this.store.dispatch(loadInstruments());
   }
 
   toggleInstrument(instrument: InstrumentDto, event: any) {
     if (event) {
-      this.selectedInstruments.push(instrument);
+      this.store.dispatch(addInstrument({ instrument }));
     } else {
-      this.removeInstrument(instrument);
+      this.store.dispatch(removeInstrument({ instrument }));
     }
   }
 
   addOtherInstrument() {
-    if (this.otherInstrument.trim() && !this.selectedInstruments.
-    some(instr => instr.name.toLowerCase() === this.otherInstrument.trim().toLowerCase())) {
-      this.selectedInstruments.push({id: 0, name: this.otherInstrument.trim()});
-      this.otherInstrument = ''; // Eingabefeld leeren
+    if (this.otherInstrument.trim()) {
+      const newInstrument: InstrumentDto = { id: 0, name: this.otherInstrument.trim() };
+      this.store.dispatch(addInstrument({ instrument: newInstrument }));
+      this.otherInstrument = '';
     }
   }
 
   removeInstrument(instrument: InstrumentDto) {
-    this.selectedInstruments = this.selectedInstruments.filter(item => item !== instrument);
+    this.store.dispatch(removeInstrument({ instrument }));
   }
 
-  instrumentSeleted(instrument: InstrumentDto) {
-    return this.selectedInstruments.some(instr => instr.name.toLowerCase() === instrument.name.trim().toLowerCase());
+  instrumentSelected(instrument: InstrumentDto): Observable<boolean> {
+    return this.selectedInstruments$.pipe(
+      map(selectedInstruments =>
+        selectedInstruments.some(instr => instr.name.toLowerCase() === instrument.name.trim().toLowerCase())
+      )
+    );
   }
 }

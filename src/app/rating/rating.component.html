@@ -1,0 +1,10 @@
+<mat-card class="rating-container">
+  <h2>Bewerte die Musikgenres</h2>
+  <div class="genre" *ngFor="let genre of genreRatings$ | async">
+    <span>{{ genre.name }}</span>
+    <mat-slider min="1" max="10" step="1" showTickMarks discrete>
+      <input matSliderThumb [ngModel]="genre.rating" (ngModelChange)="onRatingChange($event, genre)">
+    </mat-slider>
+  </div>
+  <button mat-raised-button color="primary" (click)="submitVotes()">Abstimmen</button>
+</mat-card>

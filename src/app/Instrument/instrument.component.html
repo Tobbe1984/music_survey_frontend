@@ -3,9 +3,9 @@
 
   <!-- Checkbox-Liste -->
   <mat-selection-list>
-    <mat-list-option *ngFor="let instrument of $instruments | async"
+    <mat-list-option *ngFor="let instrument of instruments$ | async"
                      (selectedChange)="toggleInstrument(instrument, $event)"
-                     [selected]="instrumentSeleted(instrument)">
+                     [selected]="(instrumentSelected(instrument) | async)">
       {{ instrument.name }}
     </mat-list-option>
   </mat-selection-list>
@@ -19,11 +19,18 @@
 
   <!-- Anzeige der ausgewählten Instrumente mit Chips -->
   <mat-chip-listbox>
-    <mat-chip *ngFor="let instrument of selectedInstruments"
+    <mat-chip *ngFor="let instrument of selectedInstruments$ | async"
               removable="true"
               (removed)="removeInstrument(instrument)">
       {{ instrument.name }}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-listbox>
+
+  <!-- Submit-Button (deaktiviert, wenn keine Instrumente ausgewählt sind) -->
+  <button mat-raised-button color="primary"
+          (click)="submit()"
+          [disabled]="!(selectedInstruments$ | async)?.length">
+    Weiter
+  </button>
 </mat-card>
