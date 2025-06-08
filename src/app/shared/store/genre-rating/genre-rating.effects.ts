@@ -43,7 +43,7 @@ export class GenreRatingEffects {
         action,
         genreRatings,
         selectedInstruments
-      ]: [Action, GenreRating[], InstrumentDto[]]) => {
+      ]) => {
         const genreVotingData: GenreVotingDto[] = [];
 
         selectedInstruments.forEach(instrument => {
