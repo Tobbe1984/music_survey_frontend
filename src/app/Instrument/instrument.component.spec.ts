@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InstrumentComponent } from './instrument.component';
-import { InstrumentControllerService } from '../api/services/instrument-controller.service';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { InstrumentState } from '../shared/store/instrument/instrument.reducer';
+import { selectAllInstruments, selectSelectedInstruments } from '../shared/store/instrument/instrument.selectors';
+import { addInstrument, loadInstruments, removeInstrument } from '../shared/store/instrument/instrument.actions';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
-import { InstrumentDto } from '../api/models/instrument-dto';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
@@ -12,24 +13,29 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { InstrumentDto } from '../api/models/instrument-dto';
 
 describe('InstrumentComponent', () => {
   let component: InstrumentComponent;
   let fixture: ComponentFixture<InstrumentComponent>;
-  let mockInstrumentService: jasmine.SpyObj<InstrumentControllerService>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let store: MockStore<InstrumentState>;
+  let mockRouter = { navigate: jasmine.createSpy('navigate') };
+
+  const mockInstruments: InstrumentDto[] = [
+    { id: 1, name: 'Gitarre' },
+    { id: 2, name: 'Klavier' },
+  ];
+
+  const mockSelectedInstruments: InstrumentDto[] = [
+    { id: 1, name: 'Gitarre' },
+  ];
 
   beforeEach(async () => {
-    mockInstrumentService = jasmine.createSpyObj('InstrumentControllerService', ['getAllInstruments']);
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
+      declarations: [InstrumentComponent],
       imports: [
-        InstrumentComponent,
         FormsModule,
-        CommonModule,
         ReactiveFormsModule,
         MatCheckboxModule,
         MatListModule,
@@ -38,55 +44,71 @@ describe('InstrumentComponent', () => {
         MatChipsModule,
         MatIconModule,
         MatInputModule,
-        NoopAnimationsModule
+        MatButtonModule,
       ],
       providers: [
-        { provide: InstrumentControllerService, useValue: mockInstrumentService },
-        { provide: Router, useValue: mockRouter }
-      ]
+        provideMockStore({
+          initialState: {
+            instruments: [],
+            selectedInstruments: [],
+          },
+          selectors: [
+            { selector: selectAllInstruments, value: mockInstruments },
+            { selector: selectSelectedInstruments, value: mockSelectedInstruments },
+          ],
+        }),
+        { provide: Router, useValue: mockRouter },
+      ],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(InstrumentComponent);
-    component = fixture.componentInstance;
   });
 
-  it('should create the component', () => {
+  beforeEach(() => {
+    fixture = TestBed.createComponent(InstrumentComponent);
+    component = fixture.componentInstance;
+    store = TestBed.inject(MockStore);
+    fixture.detectChanges();
+  });
+
+  it('sollte die Komponente erstellen', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load instruments on init', () => {
-    const instruments: InstrumentDto[] = [{ id: 1, name: 'Gitarre' }, { id: 2, name: 'Klavier' }];
-    mockInstrumentService.getAllInstruments.and.returnValue(of(instruments));
-
+  it('sollte loadInstruments beim ngOnInit dispatchen', () => {
+    spyOn(store, 'dispatch');
     component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.$instruments).toBeDefined();
+    expect(store.dispatch).toHaveBeenCalledWith(loadInstruments());
   });
 
-  it('should add selected instruments', () => {
-    const instrument: InstrumentDto = { id: 1, name: 'Gitarre' };
+  it('sollte ein Instrument hinzufügen, wenn toggleInstrument aufgerufen wird', () => {
+    spyOn(store, 'dispatch');
+    const instrument: InstrumentDto = { id: 3, name: 'Violine' };
     component.toggleInstrument(instrument, true);
-
-    expect(component.selectedInstruments).toContain(instrument);
+    expect(store.dispatch).toHaveBeenCalledWith(addInstrument({ instrument }));
   });
 
-  it('should remove selected instruments', () => {
+  it('sollte ein Instrument entfernen, wenn toggleInstrument mit false aufgerufen wird', () => {
+    spyOn(store, 'dispatch');
     const instrument: InstrumentDto = { id: 1, name: 'Gitarre' };
-    component.selectedInstruments.push(instrument);
-    component.removeInstrument(instrument);
-
-    expect(component.selectedInstruments).not.toContain(instrument);
+    component.toggleInstrument(instrument, false);
+    expect(store.dispatch).toHaveBeenCalledWith(removeInstrument({ instrument }));
   });
 
-  it('should add other instrument', () => {
-    component.otherInstrument = 'Violine';
+  it('sollte ein neues Instrument über addOtherInstrument hinzufügen', () => {
+    spyOn(store, 'dispatch');
+    component.otherInstrument = 'Trompete';
     component.addOtherInstrument();
-
-    expect(component.selectedInstruments.some(instr => instr.name === 'Violine')).toBeTrue();
+    expect(store.dispatch).toHaveBeenCalledWith(addInstrument({ instrument: { id: 0, name: 'Trompete' } }));
+    expect(component.otherInstrument).toBe('');
   });
 
-  it('should navigate on submit', () => {
+  it('sollte ein Instrument über removeInstrument entfernen', () => {
+    spyOn(store, 'dispatch');
+    const instrument: InstrumentDto = { id: 1, name: 'Gitarre' };
+    component.removeInstrument(instrument);
+    expect(store.dispatch).toHaveBeenCalledWith(removeInstrument({ instrument }));
+  });
+
+  it('sollte bei submit zur "/voting" Seite navigieren', () => {
     component.submit();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/voting']);
   });

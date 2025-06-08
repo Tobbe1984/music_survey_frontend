@@ -44,7 +44,6 @@ export class InstrumentComponent implements OnInit {
   selectedInstruments$: Observable<InstrumentDto[]>;
   otherInstrument: string = '';
 
-
   constructor(private store: Store<InstrumentState>,
               private router: Router) {
     this.instruments$ = this.store.select(selectAllInstruments);

@@ -12,6 +12,12 @@ import {EffectsModule} from "@ngrx/effects";
 import {InstrumentEffects} from "./shared/store/instrument/instrument.effects";
 import {genreRatingReducer} from "./shared/store/genre-rating/genre-rating.reducer";
 import {GenreRatingEffects} from "./shared/store/genre-rating/genre-rating.effects";
+import {MatToolbar} from "@angular/material/toolbar";
+import {MatIcon} from "@angular/material/icon";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
+import {MatListItem, MatNavList} from "@angular/material/list";
+import {MatIconButton} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -22,8 +28,19 @@ import {GenreRatingEffects} from "./shared/store/genre-rating/genre-rating.effec
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({ instrument: instrumentReducer, genreRatings: genreRatingReducer }),
-    EffectsModule.forRoot([InstrumentEffects, GenreRatingEffects])
+    StoreModule.forRoot({instrument: instrumentReducer, genreRatings: genreRatingReducer}),
+    EffectsModule.forRoot([InstrumentEffects, GenreRatingEffects]),
+    MatToolbar,
+    MatIcon,
+    MatMenu,
+    MatMenuTrigger,
+    MatSidenavContent,
+    MatSidenavContainer,
+    MatNavList,
+    MatListItem,
+    MatMenuItem,
+    MatSidenav,
+    MatIconButton
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })

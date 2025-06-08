@@ -1,0 +1,36 @@
+/* Hide the burger menu on desktop */
+.burger-menu {
+  display: none;
+}
+
+/* Show the burger menu on mobile */
+@media (max-width: 768px) {
+  .burger-menu {
+    display: block;
+  }
+
+  /* Hide the navigation links in the toolbar on mobile */
+  nav {
+    display: none;
+  }
+}
+
+/* Spacer to push content to the right */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Style for the sidenav */
+mat-sidenav {
+  width: 200px;
+}
+
+/* Style for the sidenav links */
+mat-nav-list a {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+}
+
+mat-nav-list a:hover {
+  background-color: #f5f5f5;
+}
