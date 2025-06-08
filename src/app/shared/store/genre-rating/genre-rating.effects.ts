@@ -6,16 +6,17 @@ import {of} from "rxjs";
 import {GenreControllerService} from "../../../api/services/genre-controller.service";
 import {GenreDto} from "../../../api/models/genre-dto";
 import {GenreVotingControllerService} from "../../../api/services/genre-voting-controller.service";
-import {select, Store} from "@ngrx/store";
+import {select, Store, Action} from "@ngrx/store";
 import {GenreRatingState} from "./genre-rating.reducer";
 import {InstrumentState} from "../instrument/instrument.reducer";
 import {selectSelectedInstruments} from "../instrument/instrument.selectors";
 import {GenreVotingDto} from "../../../api/models/genre-voting-dto";
+import {InstrumentDto} from "../../../api/models/instrument-dto";
 import {selectAllGenres} from "./genre-rating.selectors";
 
 @Injectable()
 export class GenreRatingEffects {
-  laodGenres$ = createEffect(() =>
+  loadGenres$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GenreRatingActions.setupGenreRatings),
       mergeMap(() =>
@@ -38,7 +39,11 @@ export class GenreRatingEffects {
         this.store.pipe(select(selectAllGenres)),
         this.store.pipe(select(selectSelectedInstruments))
       ),
-      mergeMap(([action, genreRatings, selectedInstruments]) => {
+      mergeMap(([
+        action,
+        genreRatings,
+        selectedInstruments
+      ]: [Action, GenreRating[], InstrumentDto[]]) => {
         const genreVotingData: GenreVotingDto[] = [];
 
         selectedInstruments.forEach(instrument => {
