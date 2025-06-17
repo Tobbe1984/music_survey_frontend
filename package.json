@@ -21,7 +21,6 @@
     "@angular/material": "^19.1.2",
     "@angular/platform-browser": "^19.1.4",
     "@angular/platform-browser-dynamic": "^19.1.4",
-    "@angular/pwa": "^0.5.3",
     "@angular/router": "^19.1.4",
     "@ngrx/effects": "^19.0.1",
     "@ngrx/entity": "^19.0.1",

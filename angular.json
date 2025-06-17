@@ -35,9 +35,7 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "browser": "src/main.ts",
-            "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {

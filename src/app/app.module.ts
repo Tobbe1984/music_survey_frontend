@@ -18,8 +18,6 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
 import {MatListItem, MatNavList} from "@angular/material/list";
 import {MatIconButton} from "@angular/material/button";
-import {ServiceWorkerModule} from '@angular/service-worker';
-import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -42,11 +40,7 @@ import {environment} from '../environments/environment';
     MatListItem,
     MatMenuItem,
     MatSidenav,
-    MatIconButton,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+    MatIconButton
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
